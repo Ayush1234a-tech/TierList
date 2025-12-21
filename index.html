@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft Tier List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0b1220;
+  --card: #121b2f;
+  --glow-s: #ff4d4d;
+  --glow-a: #ff9f43;
+  --glow-b: #feca57;
+  --glow-c: #48dbfb;
+  --glow-d: #1dd1a1;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #101a33, var(--bg));
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  animation: fadeIn 1s ease forwards;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+}
+
+.tier {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f1830, #0a1122);
+}
+
+.tier-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.players {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  width: 110px;
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  animation: slideUp .6s ease forwards;
+}
+
+.card img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.card span {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: .9;
+}
+
+.card:hover {
+  transform: scale(1.08);
+}
+
+.tier.s .tier-label { color: #ff4d4d; }
+.tier.a .tier-label { color: #ff9f43; }
+.tier.b .tier-label { color: #feca57; }
+.tier.c .tier-label { color: #48dbfb; }
+.tier.d .tier-label { color: #1dd1a1; }
+
+.tier.s .card:hover { box-shadow: 0 0 20px var(--glow-s); }
+.tier.a .card:hover { box-shadow: 0 0 18px var(--glow-a); }
+.tier.b .card:hover { box-shadow: 0 0 16px var(--glow-b); }
+.tier.c .card:hover { box-shadow: 0 0 14px var(--glow-c); }
+.tier.d .card:hover { box-shadow: 0 0 12px var(--glow-d); }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 700px) {
+  .tier {
+    grid-template-columns: 1fr;
+  }
+  .tier-label {
+    padding: 10px 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="title">FRIENDS TIER LIST</div>
+
+  <!-- S TIER -->
+  <div class="tier s">
+    <div class="tier-label">S</div>
+    <div class="players">
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/MasterXCritz/64">
+        <span>MasterXCritz</span>
+      </div>
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/HAIDS/64">
+        <span>HAIDS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- A TIER -->
+  <div class="tier a">
+    <div class="tier-label">A</div>
+    <div class="players">
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/z1yze_/64">
+        <span>z1yze_</span>
+      </div>
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/ItzDeadlyFl4me_/64">
+        <span>ItzDeadlyFl4me_</span>
+      </div>
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/01mubhashir34/64">
+        <span>01mubhashir34</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- B TIER -->
+  <div class="tier b">
+    <div class="tier-label">B</div>
+    <div class="players">
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/SPACE_PRIME/64">
+        <span>SPACE_PRIME</span>
+      </div>
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/Arko_Playz/64">
+        <span>Arko_Playz</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- C TIER -->
+  <div class="tier c">
+    <div class="tier-label">C</div>
+    <div class="players">
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/noobintheworld/64">
+        <span>noobintheworld</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- D TIER -->
+  <div class="tier d">
+    <div class="tier-label">D</div>
+    <div class="players">
+      <div class="card">
+        <img src="https://mc-heads.net/avatar/Goted_yt/64">
+        <span>Goted_yt</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
