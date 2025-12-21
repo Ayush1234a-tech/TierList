@@ -6,204 +6,260 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-  --bg: #0b1220;
-  --card: #121b2f;
-  --glow-s: #ff4d4d;
-  --glow-a: #ff9f43;
-  --glow-b: #feca57;
-  --glow-c: #48dbfb;
-  --glow-d: #1dd1a1;
+:root{
+  --bg:#0b1220;
+  --row:#121b2f;
+  --row-hover:#18244a;
+  --border:#1f2a44;
+  --text:#eaf1ff;
+  --muted:#9aa7c7;
+
+  --S:#ffcc4d;
+  --A:#ff9f43;
+  --B:#feca57;
+  --C:#48dbfb;
+  --D:#1dd1a1;
 }
 
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+*{box-sizing:border-box;font-family:Inter,Segoe UI,sans-serif}
+
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#101a33,var(--bg));
+  color:var(--text);
 }
 
-body {
-  margin: 0;
-  background: radial-gradient(circle at top, #101a33, var(--bg));
-  color: #fff;
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 16px 60px;
 }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 40px 20px;
-  animation: fadeIn 1s ease forwards;
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
+  margin-bottom:30px;
+  letter-spacing:.5px;
 }
 
-.title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  letter-spacing: 1px;
+/* ===== TIER SECTION ===== */
+.tier{
+  margin-bottom:26px;
 }
 
-.tier {
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  margin-bottom: 20px;
-  border-radius: 14px;
-  overflow: hidden;
-  background: linear-gradient(145deg, #0f1830, #0a1122);
+.tier-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
 }
 
-.tier-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-weight: 900;
+.tier-badge{
+  width:48px;
+  height:48px;
+  border-radius:12px;
+  font-size:26px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.players {
-  display: flex;
-  gap: 14px;
-  padding: 14px;
-  flex-wrap: wrap;
+.tier.s .tier-badge{background:var(--S);color:#000}
+.tier.a .tier-badge{background:var(--A);color:#000}
+.tier.b .tier-badge{background:var(--B);color:#000}
+.tier.c .tier-badge{background:var(--C);color:#000}
+.tier.d .tier-badge{background:var(--D);color:#000}
+
+.tier-name{
+  font-size:18px;
+  font-weight:700;
+  opacity:.9;
 }
 
-.card {
-  background: var(--card);
-  border-radius: 14px;
-  width: 110px;
-  padding: 12px 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform .25s ease, box-shadow .25s ease;
-  animation: slideUp .6s ease forwards;
+/* ===== PLAYER ROWS ===== */
+.player{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:linear-gradient(90deg,var(--row),#0e162b);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px 16px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transform:translateY(12px);
+  opacity:0;
+  animation:enter .6s ease forwards;
+  transition:background .25s ease,transform .25s ease,box-shadow .25s ease;
 }
 
-.card img {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  margin-bottom: 6px;
+.player:hover{
+  background:linear-gradient(90deg,var(--row-hover),#121e3b);
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
-.card span {
-  font-size: 13px;
-  font-weight: 600;
-  opacity: .9;
+.player img{
+  width:44px;
+  height:44px;
+  border-radius:8px;
 }
 
-.card:hover {
-  transform: scale(1.08);
+.player-name{
+  font-size:15px;
+  font-weight:700;
 }
 
-.tier.s .tier-label { color: #ff4d4d; }
-.tier.a .tier-label { color: #ff9f43; }
-.tier.b .tier-label { color: #feca57; }
-.tier.c .tier-label { color: #48dbfb; }
-.tier.d .tier-label { color: #1dd1a1; }
-
-.tier.s .card:hover { box-shadow: 0 0 20px var(--glow-s); }
-.tier.a .card:hover { box-shadow: 0 0 18px var(--glow-a); }
-.tier.b .card:hover { box-shadow: 0 0 16px var(--glow-b); }
-.tier.c .card:hover { box-shadow: 0 0 14px var(--glow-c); }
-.tier.d .card:hover { box-shadow: 0 0 12px var(--glow-d); }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.player-rank{
+  font-size:12px;
+  color:var(--muted);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* tier glow on hover */
+.tier.s .player:hover{box-shadow:0 0 20px rgba(255,204,77,.4)}
+.tier.a .player:hover{box-shadow:0 0 20px rgba(255,159,67,.4)}
+.tier.b .player:hover{box-shadow:0 0 18px rgba(254,202,87,.35)}
+.tier.c .player:hover{box-shadow:0 0 16px rgba(72,219,251,.35)}
+.tier.d .player:hover{box-shadow:0 0 14px rgba(29,209,161,.35)}
+
+@keyframes enter{
+  to{opacity:1;transform:translateY(0)}
 }
 
-@media (max-width: 700px) {
-  .tier {
-    grid-template-columns: 1fr;
-  }
-  .tier-label {
-    padding: 10px 0;
-  }
+@media(max-width:600px){
+  .player{padding:10px}
+  .tier-header{margin-bottom:8px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
   <div class="title">FRIENDS TIER LIST</div>
 
   <!-- S TIER -->
   <div class="tier s">
-    <div class="tier-label">S</div>
-    <div class="players">
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/MasterXCritz/64">
-        <span>MasterXCritz</span>
+    <div class="tier-header">
+      <div class="tier-badge">S</div>
+      <div class="tier-name">God Tier</div>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/MasterXCritz/64">
+      <div>
+        <div class="player-name">MasterXCritz</div>
+        <div class="player-rank">Combat Grandmaster</div>
       </div>
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/HAIDS/64">
-        <span>HAIDS</span>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/HAIDS/64">
+      <div>
+        <div class="player-name">HAIDS</div>
+        <div class="player-rank">Combat Master</div>
       </div>
     </div>
   </div>
 
   <!-- A TIER -->
   <div class="tier a">
-    <div class="tier-label">A</div>
-    <div class="players">
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/z1yze_/64">
-        <span>z1yze_</span>
+    <div class="tier-header">
+      <div class="tier-badge">A</div>
+      <div class="tier-name">Elite</div>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/z1yze_/64">
+      <div>
+        <div class="player-name">z1yze_</div>
+        <div class="player-rank">Combat Master</div>
       </div>
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/ItzDeadlyFl4me_/64">
-        <span>ItzDeadlyFl4me_</span>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/ItzDeadlyFl4me_/64">
+      <div>
+        <div class="player-name">ItzDeadlyFl4me_</div>
+        <div class="player-rank">Combat Master</div>
       </div>
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/01mubhashir34/64">
-        <span>01mubhashir34</span>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/01mubhashir34/64">
+      <div>
+        <div class="player-name">01mubhashir34</div>
+        <div class="player-rank">Combat Ace</div>
       </div>
     </div>
   </div>
 
   <!-- B TIER -->
   <div class="tier b">
-    <div class="tier-label">B</div>
-    <div class="players">
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/SPACE_PRIME/64">
-        <span>SPACE_PRIME</span>
+    <div class="tier-header">
+      <div class="tier-badge">B</div>
+      <div class="tier-name">Strong</div>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/SPACE_PRIME/64">
+      <div>
+        <div class="player-name">SPACE_PRIME</div>
+        <div class="player-rank">Combat Ace</div>
       </div>
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/Arko_Playz/64">
-        <span>Arko_Playz</span>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/Arko_Playz/64">
+      <div>
+        <div class="player-name">Arko_Playz</div>
+        <div class="player-rank">Combat Ace</div>
       </div>
     </div>
   </div>
 
   <!-- C TIER -->
   <div class="tier c">
-    <div class="tier-label">C</div>
-    <div class="players">
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/noobintheworld/64">
-        <span>noobintheworld</span>
+    <div class="tier-header">
+      <div class="tier-badge">C</div>
+      <div class="tier-name">Average</div>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/noobintheworld/64">
+      <div>
+        <div class="player-name">noobintheworld</div>
+        <div class="player-rank">Combat Ace</div>
       </div>
     </div>
   </div>
 
   <!-- D TIER -->
   <div class="tier d">
-    <div class="tier-label">D</div>
-    <div class="players">
-      <div class="card">
-        <img src="https://mc-heads.net/avatar/Goted_yt/64">
-        <span>Goted_yt</span>
+    <div class="tier-header">
+      <div class="tier-badge">D</div>
+      <div class="tier-name">Beginner</div>
+    </div>
+
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/Goted_yt/64">
+      <div>
+        <div class="player-name">Goted_yt</div>
+        <div class="player-rank">Combat Ace</div>
       </div>
+      
+    </div>
+    <div class="player">
+      <img src="https://mc-heads.net/avatar/Goted_yt/64">
+      <div>
+        <div class="player-name">NiZoRax</div>
+        <div class="player-rank">Combat Ace</div>
+      </div>
+      
     </div>
   </div>
 
 </div>
-
 </body>
 </html>
