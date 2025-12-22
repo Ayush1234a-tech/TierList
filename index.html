@@ -1,342 +1,748 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Minecraft Rankings</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Top 10 Minecraft Rankings — Clean Animated List</title>
 
-<style>
-:root{
-  --bg:#0b1220;
-  --card:#101a2f;
-  --card-hover:#15225a;
-  --border:#1f2c52;
-  --text:#eaf1ff;
-  --muted:#9aa7c7;
-}
+  <!--
+    Single-file project: index.html
+    - Embedded CSS and JavaScript
+    - Exactly TOP 10 players (no more, no less)
+    - Each player occupies one full row (responsive)
+    - Inspired by mctiers.com look and feel, original and editable
+  -->
 
-*{box-sizing:border-box;font-family:Inter,Segoe UI,sans-serif}
+  <style>
+    /* ==========================================
+       Variables & Base
+       ========================================== */
+    :root{
+      --bg-1: #0b0f10;
+      --bg-2: linear-gradient(180deg,#071012 0%, #0d1415 100%);
+      --panel: #0f1717;
+      --muted: #9fb3b0;
+      --accent: #6fe3a2; /* emerald-like */
+      --accent-2: #78c7ff; /* sky */
+      --glass: rgba(255,255,255,0.03);
+      --glow: 0 6px 30px rgba(111,227,162,0.06);
+      --radius: 12px;
+      --transition: 300ms cubic-bezier(.2,.9,.2,1);
+      --shadow: 0 6px 24px rgba(0,0,0,0.6);
+      --row-delay-step: 80ms;
+    }
 
-body{
-  margin:0;
-  background:radial-gradient(circle at top,#101a33,var(--bg));
-  color:var(--text);
-}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg-2);
+      color: #dff6f0;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.2;
+      padding: 24px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
 
-/* ===== NAVBAR ===== */
-.navbar{
-  height:60px;
-  display:flex;
-  align-items:center;
-  padding:0 24px;
-  background:#0a1022;
-  border-bottom:1px solid var(--border);
-}
+    /* Container centers and sets max width */
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 220px 1fr; /* sidebar + main */
+      gap:20px;
+    }
 
-.navbar h1{
-  font-size:18px;
-  font-weight:800;
-  letter-spacing:.4px;
-}
+    /* Responsive: mobile stack */
+    @media (max-width:880px){
+      .container{grid-template-columns: 1fr; padding-bottom:40px}
+    }
 
-/* ===== PAGE ===== */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px;
-}
+    /* ==========================================
+       Sidebar (minimal, stylish)
+       ========================================== */
+    .sidebar{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      position:sticky;
+      top:24px;
+      height: fit-content;
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      transition: all var(--transition);
+    }
+    .logo{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo .block{
+      width:46px;
+      height:46px;
+      border-radius:10px;
+      background: linear-gradient(135deg,#2b6b53,#6fe3a2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:#062019;
+      box-shadow: 0 6px 18px rgba(111,227,162,0.14);
+      font-family: "Minecraftia", monospace;
+      font-size:18px;
+    }
+    .logo h1{
+      font-size:16px;
+      margin:0;
+      letter-spacing:0.4px;
+      color:#e6fff7;
+    }
+    .sidebar p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .nav-mini{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .nav-mini a{
+      text-decoration:none;
+      color:var(--muted);
+      font-size:13px;
+      padding:8px 10px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.01);
+      transition: all var(--transition);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .nav-mini a:hover{
+      transform:translateY(-3px);
+      box-shadow: var(--glow);
+      color:var(--accent);
+    }
 
-.heading{
-  font-size:20px;
-  font-weight:800;
-  margin-bottom:16px;
-}
+    /* ==========================================
+       Main panel (ranking list focus)
+       ========================================== */
+    .main{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      min-height: 200px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      overflow:hidden;
+    }
 
-/* ===== ROW ===== */
-.row{
-  display:grid;
-  grid-template-columns: 60px 1.5fr 80px 2fr;
-  gap:16px;
-  align-items:center;
-  padding:14px 16px;
-  margin-bottom:10px;
-  background:linear-gradient(90deg,var(--card),#0e1635);
-  border:1px solid var(--border);
-  border-radius:14px;
-  transition:.25s;
-}
+    /* Top bar with page title */
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .page-title{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .page-title h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:0.3px;
+    }
+    .page-title p{
+      margin:0;
+      font-size:13px;
+      color:var(--muted);
+    }
 
-.row:hover{
-  background:linear-gradient(90deg,var(--card-hover),#1a2a68);
-  transform:translateY(-2px);
-  box-shadow:0 12px 30px rgba(0,0,0,.4);
-}
+    /* Ranking list */
+    .rank-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:6px;
+    }
 
-/* ===== RANK ===== */
-.rank{
-  font-size:22px;
-  font-weight:900;
-  text-align:center;
-}
+    /* Each row is a player card occupying full width */
+    .player-row{
+      display:grid;
+      grid-template-columns: 72px 1fr 420px; /* avatar | name/region | gamemodes */
+      align-items:center;
+      gap:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border-radius:12px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,0.03);
+      transform: translateY(12px);
+      opacity:0;
+      transition: transform 420ms ease, opacity 420ms ease;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    }
 
-/* ===== PLAYER ===== */
-.player{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
+    /* Mobile: stack into single column */
+    @media (max-width:880px){
+      .player-row{grid-template-columns: 64px 1fr; grid-template-rows: auto auto; padding:12px 10px;}
+      .player-row .modes{grid-column:1/-1; margin-top:6px; order:3}
+      .player-row .rank-badge{grid-column:1/-1; order:2}
+      .player-row .meta{order:1}
+    }
 
-.player img{
-  width:42px;
-  height:42px;
-  border-radius:8px;
-}
+    /* When visible, slide up into place */
+    .player-row.show{
+      transform: translateY(0);
+      opacity:1;
+    }
 
-.name{
-  font-weight:700;
-}
+    /* Avatar / rank column */
+    .avatar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .avatar img{
+      width:64px;
+      height:64px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .rank-badge{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: var(--muted);
+      font-size:14px;
+    }
+    .rank-number{
+      background: linear-gradient(135deg,#0f2a22,#12372e);
+      color:var(--accent);
+      padding:8px 10px;
+      border-radius:10px;
+      font-weight:700;
+      box-shadow: 0 6px 18px rgba(17, 86, 61, 0.1);
+    }
 
-.sub{
-  font-size:12px;
-  color:var(--muted);
-}
+    /* Meta: name & region */
+    .meta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .player-name{
+      font-size:16px;
+      margin:0;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .player-name .main-mode{
+      padding:6px 8px;
+      border-radius:8px;
+      font-size:12px;
+      color:#061916;
+      background: linear-gradient(135deg,var(--accent), #4fd9a6);
+      box-shadow: 0 6px 18px rgba(111,227,162,0.12);
+      font-weight:700;
+    }
+    .region{
+      font-size:13px;
+      color:var(--muted);
+    }
 
-/* ===== REGION ===== */
-.region{
-  padding:6px 10px;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:700;
-  text-align:center;
-}
+    /* Gamemode badges (scrollable on small screens) */
+    .modes{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      overflow:auto;
+      padding:6px;
+    }
+    .mode-badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));
+      padding:8px 10px;
+      border-radius:10px;
+      min-width:110px;
+      border:1px solid rgba(255,255,255,0.02);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      cursor:default;
+      position:relative;
+      white-space:nowrap;
+    }
+    .mode-icon{
+      width:28px;
+      height:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      background: rgba(255,255,255,0.03);
+      flex-shrink:0;
+    }
+    .mode-label{
+      display:flex;
+      flex-direction:column;
+      text-align:left;
+    }
+    .mode-label .mode-name{font-size:13px; color:#dff6f0; font-weight:600}
+    .mode-label .mode-tier{font-size:12px; color:var(--muted)}
 
-.NA{background:#4c1d1d;color:#ff8a8a}
-.EU{background:#123c1d;color:#6bff9a}
-.AS{background:#1a2a4f;color:#9ecbff}
+    /* Hover effects for player and badges */
+    .player-row:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.7);
+    }
+    .player-row:hover img{ transform: scale(1.06); box-shadow: 0 10px 40px rgba(111,227,162,0.12) }
 
-/* ===== MODES ===== */
-.modes{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
+    /* Glow when hovering badges */
+    .mode-badge:hover{
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 10px 36px rgba(120,199,255,0.06);
+    }
 
-.mode{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  background:#0c1430;
-  border:1px solid var(--border);
-  padding:4px 6px;
-  border-radius:6px;
-  font-size:11px;
-}
+    /* selected/highlight state for "main" gamemode */
+    .mode-main{
+      background: linear-gradient(135deg, rgba(120,199,255,0.12), rgba(111,227,162,0.06));
+      border: 1px solid rgba(111,227,162,0.12);
+    }
 
-.mode img{
-  width:14px;
-}
+    /* Tooltip (dynamically positioned) */
+    .tooltip{
+      position:fixed;
+      pointer-events:none;
+      background: rgba(8,12,12,0.9);
+      color:#d7fff6;
+      padding:8px 10px;
+      border-radius:8px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+      font-size:13px;
+      z-index:9999;
+      transform: translate(-50%, -120%);
+      white-space:nowrap;
+      opacity:0;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+    .tooltip.show{ opacity:1; transform: translate(-50%, -140%); }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:900px){
-  .row{
-    grid-template-columns: 40px 1fr;
-    gap:10px;
-  }
-  .region,.modes{display:none}
-}
-</style>
+    /* Footer */
+    .footer{
+      margin-top:8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:10px;
+      background:transparent;
+    }
+
+    /* Small improvements for scrollbars inside .modes */
+    .modes::-webkit-scrollbar{ height:10px; }
+    .modes::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,0.03);
+      border-radius:10px;
+    }
+
+    /* Tiny responsive tune */
+    @media (max-width:460px){
+      .mode-badge{min-width:100px; padding:7px}
+      .avatar img{width:56px; height:56px}
+      .player-row{grid-template-columns: 56px 1fr;}
+    }
+
+  </style>
 </head>
-
 <body>
-
-<div class="navbar">
-  <h1>MC RANKINGS • OVERALL</h1>
-</div>
-
-<div class="container">
-  <div class="heading">Top 10 Players</div>
-
-  <!-- 1 -->
-  <div class="row">
-    <div class="rank">1st</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/FestiveGrim/64">
-      <div>
-        <div class="name">FestiveGrim</div>
-        <div class="sub">Combat Grandmaster • 420 points</div>
+  <div class="container">
+    <!-- Sidebar (small navigation/branding) -->
+    <aside class="sidebar" aria-label="Sidebar">
+      <div class="logo">
+        <div class="block">MC</div>
+        <div>
+          <h1>Ranks</h1>
+          <p>Top 10 PvP players — Clean list</p>
+        </div>
       </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode"><img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png"> HT1</div>
-      <div class="mode"><img src="https://cdn-icons-png.flaticon.com/512/3106/3106797.png"> LT1</div>
-      <div class="mode"><img src="https://cdn-icons-png.flaticon.com/512/3106/3106897.png"> HT1</div>
-    </div>
+
+      <p>Dark theme inspired by Minecraft + smooth animations. Focused on the ranking list only.</p>
+
+      <div class="nav-mini" aria-hidden>
+        <a href="#" title="Overall">Overall</a>
+        <a href="#" title="UHC">UHC</a>
+        <a href="#" title="SMP">SMP</a>
+        <a href="#" title="Pot">Pot</a>
+        <a href="#" title="Sword">Sword</a>
+      </div>
+    </aside>
+
+    <!-- Main content: ranking list -->
+    <main class="main" id="main">
+      <div class="topbar">
+        <div class="page-title">
+          <div style="width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#2b6b53,#6fe3a2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#062019">T</div>
+          <div>
+            <h2>Top 10 PvP — Global Rankings</h2>
+            <p>Each row is a player — their avatar, region, and gamemode tiers</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="font-size:13px;color:var(--muted)">Updated: <strong style="color:#c9fff0;margin-left:6px">Live</strong></div>
+        </div>
+      </div>
+
+      <div class="rank-list" id="rankList">
+        <!-- Player rows are inserted here by JavaScript -->
+        <!-- Template shown for reference (not used):
+        <div class="player-row">
+          <div class="avatar">
+            <img src="https://mc-heads.net/avatar/Steve/64" alt="avatar">
+          </div>
+          <div class="meta">
+            <div class="player-name">Steve <span class="main-mode">Overall</span></div>
+            <div class="region">NA</div>
+          </div>
+          <div class="modes">
+            <div class="mode-badge">
+              <div class="mode-icon"> ... </div>
+              <div class="mode-label"><div class="mode-name">UHC</div><div class="mode-tier">High Tier 1</div></div>
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+
+      <div class="footer">Minimal footer — ranking list only • Dark Minecraft-inspired design</div>
+    </main>
   </div>
 
-  <!-- 2 -->
-  <div class="row">
-    <div class="rank">2nd</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/ItzRealMyro/64">
-      <div>
-        <div class="name">ItzRealMyro</div>
-        <div class="sub">Combat Master • 330 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT1</div>
-      <div class="mode">🧪 HT2</div>
-      <div class="mode">🏹 LT2</div>
-    </div>
-  </div>
+  <!-- Tooltip element -->
+  <div id="tooltip" class="tooltip" role="tooltip" aria-hidden="true"></div>
 
-  <!-- 3 -->
-  <div class="row">
-    <div class="rank">3rd</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/Pointer__/64">
-      <div>
-        <div class="name">z1yze_</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+  <script>
+    /*
+      JavaScript
+      - Inserts exactly top-10 players into the DOM
+      - Handles staggered entry animation for each row
+      - Adds hover tooltip for badges and player rows
+      - Lightweight and easy to edit: change players[] object to update list
+    */
 
-  <!-- 4 -->
-  <div class="row">
-    <div class="rank">4th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/linhQjDQq1218/64">
-      <div>
-        <div class="name">01mubashir34</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+    // Data: exactly 10 players. Change/add properties to edit.
+    // Avatar link uses mc-heads.net avatars: https://mc-heads.net/avatar/{name}/64
+    const players = [
+      {
+        rank: 1, name: "FestiveGrim", region: "NA", avatar: "https://mc-heads.net/avatar/FestiveGrim/64",
+        mainMode: "Overall",
+        modes: [
+          {key: "SMP", tier: "High Tier 1"},
+          {key: "Nether", tier: "High Tier 1"},
+          {key: "Sword", tier: "Low Tier 1"}
+        ]
+      },
+      {
+        rank: 2, name: "Ziddi_Godwinn", region: "NA", avatar: "https://mc-heads.net/avatar/Ziddi_Godwinn/64",
+        mainMode: "Crystal",
+        modes: [
+          {key: "Crystal", tier: "High Tier 1"},
+          {key: "SMP", tier: "Low Tier 1"},
+          {key: "Axe", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 3, name: "ItzRealMyro", region: "EU", avatar: "https://mc-heads.net/avatar/ItzRealMyro/64",
+        mainMode: "Sword",
+        modes: [
+          {key: "Sword", tier: "High Tier 1"},
+          {key: "Axe", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 2"},
+        ]
+      },
+      {
+        rank: 4, name: "Rexar_xyz", region: "EU", avatar: "https://mc-heads.net/avatar/Rexar_xyz/64",
+        mainMode: "Axe",
+        modes: [
+          {key: "Axe", tier: "High Tier 1"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "SMP", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 5, name: "z1yze_", region: "NA", avatar: "https://mc-heads.net/avatar/Pointer__/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 1"},
+          {key: "NethOP", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+      {
+        rank: 6, name: "01mubashir34", region: "EU", avatar: "https://mc-heads.net/avatar/linhQjDQq1218/64",
+        mainMode: "SMP",
+        modes: [
+          {key: "SMP", tier: "High Tier 1"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "Axe", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 7, name: "ItzDeadlyFl4me_", region: "EU", avatar: "https://mc-heads.net/avatar/d953c3fa3b00495f61bd05da9804099bb3c38cb3b90fccf352085f6af41bc10c",
+        mainMode: "Nether",
+        modes: [
+          {key: "NethOP", tier: "Low Tier 1"},
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 8, name: "Arko_Playz", region: "EU", avatar: "https://mc-heads.net/avatar/Clown/64",
+        mainMode: "Sword",
+        modes: [
+          {key: "Sword", tier: "High Tier 1"},
+          {key: "SMP", tier: "High Tier 1"},
+          {key: "Axe", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 9, name: "Swapnanil151", region: "EU", avatar: "https://mc-heads.net/avatar/SenpaiSpider/64",
+        mainMode: "UHC",
+        modes: [
+          {key: "UHC", tier: "High Tier 1"},
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "SMP", tier: "High Tier 2"}
+        ]
+      },
+      {
+        rank: 10, name: "SPACE_PRIME", region: "EU", avatar: "https://mc-heads.net/avatar/Marlowww/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+      {
+        rank: 11, name: "noobintheworld (Prime)", region: "EU", avatar: "https://mc-heads.net/avatar/Steve/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+       {
+        rank: 12, name: "Goated_YT", region: "EU", avatar: "https://mc-heads.net/avatar/noobkamaster99/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+      {
+        rank: 13, name: "NiZORax", region: "EU", avatar: "https://mc-heads.net/avatar/Origin/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+      {
+        rank: 14, name: "Addicted_Gaming", region: "EU", avatar: "https://mc-heads.net/avatar/ClownPierce/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      },
+      {
+        rank: 15, name: "NOT_SICKK", region: "EU", avatar: "https://mc-heads.net/avatar/SquidGame/64",
+        mainMode: "Pot",
+        modes: [
+          {key: "Pot", tier: "High Tier 2"},
+          {key: "Sword", tier: "High Tier 2"},
+          {key: "UHC", tier: "High Tier 3"}
+        ]
+      }
+    ];
 
-  <!-- 5 -->
-  <div class="row">
-    <div class="rank">5th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/d953c3fa3b00495f61bd05da9804099bb3c38cb3b90fccf352085f6af41bc10c">
-      <div>
-        <div class="name">ItzDeadlyFl4me_</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+    // Gamemode icon factory: returns an SVG element string for each gamemode key.
+    // Editable: add or modify icons here for different gamemodes.
+    function modeIconSVG(key){
+      // Simple, lightweight SVGs resembling small game icons (sword, potion, star, skull, pickaxe)
+      const common = 'width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"';
+      switch(key.toLowerCase()){
+        case 'uhc':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#15373a"/><path d="M12 3v10" stroke="#78c7ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="16" r="2" fill="#6fe3a2"/></svg>`;
+        case 'pot':
+        case 'potion':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#2b122b"/><path d="M7 7c2-1 6-1 10 0l-5 9-5-9z" fill="#78c7ff"/><path d="M8.5 18h7" stroke="#6fe3a2" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+        case 'smp':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#13221a"/><path d="M6 15l6-9 6 9H6z" fill="#6fe3a2" opacity="0.95"/></svg>`;
+        case 'sword':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#1a1620"/><path d="M4 20l7-7 3 3-7 7-3-3z" fill="#78c7ff"/><path d="M11 9l4 4" stroke="#6fe3a2" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+        case 'axe':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#151826"/><path d="M7 4l9 9" stroke="#78c7ff" stroke-width="1.6" stroke-linecap="round"/><path d="M10 14l3 3" stroke="#6fe3a2" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+        case 'nethop':
+        case 'nether':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#231017"/><path d="M8 7c2-1 6-1 8 0l-4 8-4-8z" fill="#ff8a5b"/><circle cx="12" cy="16" r="1.4" fill="#ffc9b2"/></svg>`;
+        case 'crystal':
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#071723"/><path d="M12 4l3 6-3 10-3-10 3-6z" fill="#80ffd3"/></svg>`;
+        default:
+          return `<svg ${common}><rect width="24" height="24" rx="4" fill="#0e2421"/><circle cx="12" cy="12" r="4" fill="#6fe3a2"/></svg>`;
+      }
+    }
 
-  <!-- 6 -->
-  <div class="row">
-    <div class="rank">6th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/Clown/64">
-      <div>
-        <div class="name">Arko_Playz</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+    // Helper: create DOM nodes from HTML string
+    function htmlToElement(html){
+      const template = document.createElement('template');
+      template.innerHTML = html.trim();
+      return template.content.firstChild;
+    }
 
-  <!-- 7 -->
-  <div class="row">
-    <div class="rank">7th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/SenpaiSpider/64">
-      <div>
-        <div class="name">Swapnanil151</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+    // Build the player rows
+    const rankListEl = document.getElementById('rankList');
 
-  <!-- 8 -->
-  <div class="row">
-    <div class="rank">8th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/Marlowww/64">
-      <div>
-        <div class="name">SPACE_PRIME</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+    players.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'player-row';
+      row.setAttribute('data-rank', p.rank);
+      row.setAttribute('tabindex', '0');
 
-  <!-- 9 -->
-  <div class="row">
-    <div class="rank">9th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/ItzRealMe">
-      <div>
-        <div class="name">noobintheworld (Prime)</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+      // Avatar & rank
+      const avatarCol = document.createElement('div');
+      avatarCol.className = 'avatar';
+      avatarCol.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <img loading="lazy" src="${p.avatar}" alt="${p.name} avatar" />
+        </div>
+      `;
 
-  <!-- 10 -->
-  <div class="row">
-    <div class="rank">10th</div>
-    <div class="player">
-      <img src="https://mc-heads.net/avatar/noobkamaster99/64">
-      <div>
-        <div class="name">Goated_YT</div>
-        <div class="sub">Combat Master • 290 points</div>
-      </div>
-    </div>
-    <div class="region NA">NA</div>
-    <div class="modes">
-      <div class="mode">⚔️ HT2</div>
-      <div class="mode">🪓 HT3</div>
-      <div class="mode">💎 LT2</div>
-    </div>
-  </div>
+      // Meta (name + region)
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `
+        <div class="player-name">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <strong style="font-weight:700">${p.name}</strong>
+            <span class="main-mode">${p.mainMode}</span>
+          </div>
+        </div>
+        <div class="region">${p.region}</div>
+      `;
 
+      // Gamemodes container
+      const modesWrap = document.createElement('div');
+      modesWrap.className = 'modes';
 
-</div>
+      // Add each mode badge
+      p.modes.forEach(mode => {
+        const mb = document.createElement('div');
+        mb.className = 'mode-badge';
+        // Add special highlight if this is the player's main mode (case-insensitive)
+        if(mode.key.toLowerCase() === p.mainMode.toLowerCase() || mode.key.toLowerCase() === p.mainMode.toLowerCase().slice(0,4)){
+          mb.classList.add('mode-main');
+        }
+
+        // inner html: icon + labels
+        mb.innerHTML = `
+          <div class="mode-icon" aria-hidden>
+            ${modeIconSVG(mode.key)}
+          </div>
+          <div class="mode-label">
+            <div class="mode-name">${mode.key}</div>
+            <div class="mode-tier">${mode.tier}</div>
+          </div>
+        `;
+        // tooltip on hover
+        mb.addEventListener('mouseenter', (ev) => showTooltip(ev, `${p.name} — ${mode.key}: ${mode.tier}`));
+        mb.addEventListener('mousemove', (ev) => moveTooltip(ev));
+        mb.addEventListener('mouseleave', hideTooltip);
+
+        modesWrap.appendChild(mb);
+      });
+
+      // Rank badge (position)
+      const rankBadge = document.createElement('div');
+      rankBadge.className = 'rank-badge';
+      rankBadge.innerHTML = `<div class="rank-number">#${p.rank}</div>`;
+
+      // Compose row grid items
+      // We'll append: avatarCol | meta (name/region) | modesWrap
+      row.appendChild(avatarCol);
+      row.appendChild(meta);
+      row.appendChild(modesWrap);
+      // Add rank badge overlay on small screens via CSS but also append visually for accessibility
+      row.appendChild(rankBadge);
+
+      // Add hover tooltip for the entire row (shows main mode)
+      row.addEventListener('mouseenter', (ev) => showTooltip(ev, `${p.rank}. ${p.name} — main: ${p.mainMode}`));
+      row.addEventListener('mousemove', (ev) => moveTooltip(ev));
+      row.addEventListener('mouseleave', hideTooltip);
+
+      rankListEl.appendChild(row);
+    });
+
+    // Animate entries: staggered 'show' class
+    window.addEventListener('load', () => {
+      const rows = document.querySelectorAll('.player-row');
+      rows.forEach((r, idx) => {
+        const delay = idx * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--row-delay-step')) || (idx * 80);
+        setTimeout(()=> r.classList.add('show'), delay + 120);
+      });
+    });
+
+    // Tooltip logic
+    const tooltip = document.getElementById('tooltip');
+
+    function showTooltip(e, text){
+      tooltip.innerText = text;
+      tooltip.classList.add('show');
+      tooltip.setAttribute('aria-hidden','false');
+      positionTooltip(e);
+    }
+    function moveTooltip(e){
+      positionTooltip(e);
+    }
+    function hideTooltip(){
+      tooltip.classList.remove('show');
+      tooltip.setAttribute('aria-hidden','true');
+    }
+    function positionTooltip(e){
+      const pad = 12;
+      // If touch device or small width, avoid using fixed positioning relative to cursor
+      let x = e.clientX;
+      let y = e.clientY;
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y - pad}px`;
+    }
+
+    // Accessibility: keyboard focus reveal show class when focused
+    document.addEventListener('focusin', (e) => {
+      const row = e.target.closest('.player-row');
+      if(row) row.classList.add('show');
+    });
+
+    // Note: To edit players, change the `players` array at top of this script.
+  </script>
 </body>
 </html>
