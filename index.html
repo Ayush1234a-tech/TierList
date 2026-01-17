@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <<link rel="shortcut icon" href="./icons/ytlogo.jpg" type="image/x-icon">
-  <title>Ayush Gaming - PVP LEADERBOARD </title>
+  <title>Top 10 Minecraft PvP Rankings — Tier-Focused Leaderboard</title>
   <style>
     /* ==========================================
        Variables & Base
@@ -654,11 +653,7 @@
 
       <!-- Tier Legend -->
       <div class="tier-legend">
-        <div class="legend-item"><span class="legend-color legend-ht1"></span> HT1 (Gold)</div>
-        <div class="legend-item"><span class="legend-color legend-ht2"></span> HT2 (Blue)</div>
-        <div class="legend-item"><span class="legend-color legend-ht3"></span> HT3 (Bronze)</div>
-        <div class="legend-item"><span class="legend-color legend-lt1"></span> LT1 (Steel)</div>
-        <div class="legend-item"><span class="legend-color legend-lt2"></span> LT2 (Dark Steel)</div>
+        
       </div>
 
       <div class="rank-list" id="rankList">
@@ -1041,25 +1036,25 @@ function getModeLogo(mode) {
   const modeLower = mode.toLowerCase();
   
   if (modeLower.includes('nethpot')) {
-    return './icons/nethpot-Photoroom.png';
+    return '/icons/nethpot-Photoroom.png';
   } else if (modeLower.includes('diapot') || modeLower.includes('diasmp')) {
-    return './icons/diapot-Photoroom.png';
+    return '/icons/diapot-Photoroom.png';
   } else if (modeLower.includes('crystal')) {
-    return './icons/crystal-Photoroom.png';
+    return '/icons/crystal-Photoroom.png';
   } else if (modeLower.includes('axe')) {
-    return './icons/axe-Photoroom.png';
+    return '/icons/axe-Photoroom.png';
   } else if (modeLower.includes('mace')) {
-    return './icons/mace-Photoroom.png'; // NEW: Mace gets its own image
+    return '/icons/mace-Photoroom.png'; // NEW: Mace gets its own image
   } else if (modeLower.includes('smpkit') || modeLower.includes('smp')) {
-    return './icons/diasmp-Photoroom.png';
+    return '/icons/diasmp-Photoroom.png';
   } else if (modeLower.includes('tank')) {
-    return './icons/tank-Photoroom.png';
+    return '/icons/tank-Photoroom.png';
   } else if (modeLower.includes('lifesteal')) {
-    return './icons/lifesteal-Photoroom.png';
+    return '/icons/lifesteal-Photoroom.png';
   } else if (modeLower.includes('sword')) {
-    return './icons/axe-Photoroom.png';
+    return '/icons/axe-Photoroom.png';
   } else {
-    return './icons/nethpot-Photoroom.png'; // Default
+    return '/icons/nethpot-Photoroom.png'; // Default
   }
 }
 
@@ -1335,5 +1330,3 @@ function getModeLogo(mode) {
   </script>
 </body>
 </html>
-
-
